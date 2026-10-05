@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antares Butt Jiggler</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f4f1ea;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #242424;
+    padding: 28px 18px;
+  }
+
+  h1 {
+    margin: 0 0 18px;
+    font-size: clamp(24px, 4vw, 38px);
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  .scene {
+    position: relative;
+    width: min(760px, 94vw);
+    line-height: 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.16);
+    background: #000;
+  }
+
+  .scene img {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .dog-base {
+    position: relative;
+    z-index: 1;
+  }
+
+  .butt {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    transform-origin: 63% 69%;
+  }
+
+  .butt.jiggling {
+    animation: buttJiggle .7s cubic-bezier(.25,.7,.35,1) both;
+  }
+
+  @keyframes buttJiggle {
+    0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+    12%  { transform: translate(-7px, 2px) rotate(-1.5deg) scale(1.012,.988); }
+    25%  { transform: translate(9px, -1px) rotate(2deg) scale(.992,1.008); }
+    40%  { transform: translate(-8px, 2px) rotate(-1.8deg) scale(1.014,.986); }
+    55%  { transform: translate(6px, -1px) rotate(1.4deg) scale(.996,1.006); }
+    70%  { transform: translate(-4px, 1px) rotate(-.8deg) scale(1.006,.994); }
+    85%  { transform: translate(2px, 0) rotate(.35deg); }
+    100% { transform: translate(0,0) rotate(0deg) scale(1); }
+  }
+
+  .hotspot {
+    position: absolute;
+    z-index: 4;
+    left: 36%;
+    top: 53%;
+    width: 58%;
+    height: 31%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 48%;
+  }
+
+  .hotspot:focus-visible {
+    outline: 3px solid #222;
+    outline-offset: 4px;
+  }
+
+  .status {
+    margin-top: 20px;
+    min-height: 1.4em;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .02em;
+  }
+
+  .hint {
+    margin-top: 8px;
+    color: #777;
+    font-size: 14px;
+  }
+
+  .counter {
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: .02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .butt.jiggling { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <h1>Antares Butt Jiggler</h1>
+
+  <div class="scene">
+    <img class="dog-base" src="dog.jpg" alt="A dog curled up on a blue chair">
+    <img class="butt" id="butt" src="dogbutt.png" alt="" aria-hidden="true">
+    <button class="hotspot" id="hotspot" aria-label="Jiggle the dog's butt"></button>
+  </div>
+
+  <div class="status" id="status">The butt is waiting.</div>
+  <div class="hint">Click the butt.</div>
+  <div class="counter" id="counter">Jiggles: 0</div>
+
+<script>
+const butt = document.getElementById('butt');
+const hotspot = document.getElementById('hotspot');
+const status = document.getElementById('status');
+const counter = document.getElementById('counter');
+let jiggleCount = 0;
+
+hotspot.addEventListener('click', () => {
+  butt.classList.remove('jiggling');
+  void butt.offsetWidth;
+  butt.classList.add('jiggling');
+
+  status.textContent = 'JIGGLE.';
+  jiggleCount++;
+  counter.textContent = `Jiggles: ${jiggleCount}`;
+
+  clearTimeout(window.jiggleTimer);
+  window.jiggleTimer = setTimeout(() => {
+    status.textContent = 'The butt is waiting.';
+  }, 700);
+});
+
+butt.addEventListener('animationend', () => {
+  butt.classList.remove('jiggling');
+});
+</script>
+</body>
+</html>
